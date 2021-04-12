@@ -24,45 +24,28 @@ void setup() {
 }
 
 void loop() {
-  Wire.beginTransmission(9);//9 here is the address of the slave board
-  
   int tree = analogRead(treeSensor);
   Serial.print("\nTree reading = ");
   Serial.print(tree);
-  byte myArray[2];
-  myArray[0] = (tree >> 8) & 0xFF;
-  myArray[1] = tree & 0xFF;
-  Wire.write(myArray, 2);
-  //Wire.write(tree/4);
   
   int bush = analogRead(bushSensor);
   Serial.print("\nBush reading = ");
   Serial.print(bush);
-  myArray[0] = (bush >> 8) & 0xFF;
-  myArray[1] = bush & 0xFF;
-  Wire.write(myArray, 2);
   
   int mountain = analogRead(mountainSensor);
   Serial.print("\nMountain reading = ");
   Serial.print(mountain);
-  myArray[0] = (mountain >> 8) & 0xFF;
-  myArray[1] = mountain & 0xFF;
-  Wire.write(myArray, 2);
   
   int shrub = analogRead(shrubSensor);
   Serial.print("\nShrub reading = ");
   Serial.print(shrub);
-  myArray[0] = (shrub >> 8) & 0xFF;
-  myArray[1] = shrub & 0xFF;
-  Wire.write(myArray, 2);
-
-  Wire.endTransmission();
-
-  delay(100); 
   
   int count = inPlace(tree,bush,mountain,shrub);
+  byte b = (byte)count;
+  Wire.beginTransmission(9);//9 here is the address of the slave board
+  Wire.write(b);
+  Wire.endTransmission();
   moveServo(count);
-  
 }
 
 void moveServo(int objCount) {
