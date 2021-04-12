@@ -7,8 +7,7 @@ Servo myservo2;  // create servo object to control a servo
 int LEDPins[] = {13, 10, 9, 8, 7, 6};
 int countOFpin = 6; //number of pins 
 
-int tree, bush, mountain, shrub;
-
+int count;
 void setup() {
   Wire.begin(9);
   Wire.onReceive(receiveEvent);
@@ -20,39 +19,13 @@ void setup() {
 }
 
 void loop() {
-  int count = inPlace(tree,bush,mountain,shrub);
   lights(count);
 }
+
 void receiveEvent(int bytes){
-  byte a,b;
-  a = Wire.read();
-  b = Wire.read();
-  int bigNum = a;
-  tree = bigNum << 8 | b;
-  
-  a = Wire.read();
-  b = Wire.read();
-  bigNum = a;
-  bush = bigNum << 8 | b;
-  
-  a = Wire.read();
-  b = Wire.read();
-  bigNum = a;
-  mountain = bigNum << 8 | b;
-  
-  a = Wire.read();
-  b = Wire.read();
-  bigNum = a;
-  shrub = bigNum << 8 | b;
-  
-  Serial.print(tree);
-  Serial.print(' ');
-  Serial.print(bush);
-  Serial.print(' ');
-  Serial.print(mountain);
-  Serial.print(' ');
-  Serial.print(shrub);
-  Serial.print('\n');
+  byte b = Wire.read();
+  count = (int)b;
+  Serial.println(count);
 }
 
 void lights(int objCount){
@@ -77,21 +50,4 @@ void lights(int objCount){
       digitalWrite(LEDPins[PIN], LOW);  
     }
   }
-}
-
-int inPlace(int tree,int bush,int mountain,int shrub){
-  int count = 0;
-  if (tree >= 30){
-    count++;
-  }
-  if (bush >= 30){
-    count++;
-  }
-  if (mountain >=25){
-    count++;
-  }
-  if (shrub >= 25){
-    count++;
-  }
-  return count;
 }
