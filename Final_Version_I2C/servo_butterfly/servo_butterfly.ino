@@ -41,22 +41,26 @@ void loop() {
   Serial.print(shrub);
   
   int count = inPlace(tree,bush,mountain,shrub);
+  Serial.print("\nCount = ");
+  Serial.print(count);
+  
   byte b = (byte)count;
   Wire.beginTransmission(9);//9 here is the address of the slave board
   Wire.write(b);
   Wire.endTransmission();
+  //delay(100);
   moveServo(count);
 }
 
 void moveServo(int objCount) {
   int wingSpeed = map(objCount, 0,4,15,5);
-  for (pos = 80; pos <= 160; pos += 1) { // goes from 0 degrees to 85 degrees
+  for (pos = 30; pos <= 110; pos += 1) { // goes from 0 degrees to 85 degrees
     // in steps of 1 degree
     myservo1.write(pos);              // tell servo to go to position in variable 'pos'
     myservo2.write(pos);
     delay(wingSpeed);                       // waits 15ms for the servo to reach the position
   }
-  for (pos = 160; pos >= 80; pos -= 1) { // goes from 85 degrees to 0 degrees
+  for (pos = 110; pos >= 30; pos -= 1) { // goes from 85 degrees to 0 degrees
     myservo1.write(pos);              // tell servo to go to position in variable 'pos'
     myservo2.write(pos);
     delay(wingSpeed);                       // waits 15ms for the servo to reach the position
@@ -71,7 +75,7 @@ int inPlace(int tree,int bush,int mountain,int shrub){
   if (bush >= 20){
     count++;
   }
-  if (mountain >=25){
+  if (mountain >=15){
     count++;
   }
   if (shrub >= 25){
